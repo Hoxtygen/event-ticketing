@@ -1,0 +1,23 @@
+apiVersion: skaffold/v2beta28
+kind: Config
+metadata:
+  name: microservices
+deploy:
+  kubectl:
+    manifests:
+      - ./infrastructure/k8s/*
+build:
+  local:
+    concurrency: 1
+    tryImportMissing: true
+    push: false
+  artifacts:
+    - image: hoxtygen/event-ticketing-auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "src/**/*.ts"
+  
